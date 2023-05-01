@@ -11,7 +11,7 @@ DayXDay is an app that helps you organize daily tasks and notes by automatically
 - Stores encrypted notes securely
 - Displays all notes and past reports
 
-##Requirements
+## Requirements
 
 - Python 3.x
 - OpenAI API key
