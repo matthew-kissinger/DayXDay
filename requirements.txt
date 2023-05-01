@@ -52,12 +52,9 @@ pylev==1.4.0
 pyparsing==3.0.9
 pyseto==1.7.0
 python-http-client==3.3.7
-python-lsp-jsonrpc==1.0.0
 pytoolconfig==1.2.5
 pytz==2022.7.1
 pytz-deprecation-shim==0.1.0.post0
-replit==3.2.5
-replit-python-lsp-server==1.15.9
 requests==2.28.2
 requests-toolbelt==0.9.1
 rope==1.7.0
