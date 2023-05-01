@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="mt-4">Personalized Daily Briefing</h1>
+
+  {% if report %}
+    <div class="card mt-4">
+      <div class="card-body">
+        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ report }}</pre>
+      </div>
+    </div>
+  {% else %}
+    <form method="post" class="mt-4">
+      <button type="submit" class="btn btn-primary">Generate Report</button>
+    </form>
+  {% endif %}
+
+  <a href="{{ url_for('home') }}" class="btn btn-secondary mt-4">Back to home</a>
+{% endblock %}

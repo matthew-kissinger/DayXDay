@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="mt-4">DayXDay</h1>
+
+  <form method="post" class="mt-4">
+    <div class="form-group">
+      <label for="note">Add a note:</label>
+      <textarea name="note" id="note" class="form-control" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <h2 class="mt-5">Your notes:</h2>
+  <div class="list-group mt-3">
+    {% for category, notes in notes.items() %}
+      {% if notes %}
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                {{ category }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}">
+            <div class="card-body">
+              <ul>
+                {% for note in notes %}
+                  <li>{{ note }}
+                    <form method="post" action="{{ url_for('mark_complete') }}" class="d-inline">
+                      <input type="hidden" name="category" value="{{ category }}">
+                      <input type="hidden" name="note_index" value="{{ loop.index0 }}">
+                      <button type="submit" class="btn btn-sm btn-outline-danger">Mark as complete</button>
+                    </form>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  
+
+  <form method="post" action="{{ url_for('report') }}">
+    <button type="submit" class="btn btn-secondary mt-4">Generate Daily Briefing</button>
+    <h2 class="mt-5">Generated Reports:</h2>
+    <div class="list-group mt-3">
+      {% for report_file, report_content in reports %}
+        <a href="{{ url_for('view_report', report_file=report_file.split('/')[-1]) }}" class="list-group-item list-group-item-action">{{ report_file.split('/')[-1] }}</a>
+      {% endfor %}
+</form>
+
+  <script>
+    $(document).ready(function() {
+      $('.collapse').collapse();
+    });
+  </script>
+{% endblock %}
