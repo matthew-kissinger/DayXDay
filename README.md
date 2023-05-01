@@ -11,6 +11,20 @@ DayXDay is an app that helps you organize daily tasks and notes by automatically
 - Stores encrypted notes securely
 - Displays all notes and past reports
 
+##Requirements
+
+- Python 3.x
+- OpenAI API key
+- SendGrid API key (optional)
+
+Before installing and running the code, make sure you have Python 3.x installed on your system. You can download the latest version of Python from the official website: https://www.python.org/downloads/
+
+You also need an OpenAI API key to use the app. You can get an API key by signing up for OpenAI at https://openai.com/signup/. Once you have an API key, you'll need to add it to the config.py file in the project directory.
+
+If you want to enable email reports, you'll also need a SendGrid API key. You can sign up for SendGrid at https://sendgrid.com/free/. Once you have an API key, you'll need to add it to the config.py file in the project directory.
+
+Note that the SendGrid API key is optional. You can still use the app without it, but you won't be able to send email reports.
+
 ## Installation
 
 1. Clone this repository:
