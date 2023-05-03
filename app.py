@@ -10,6 +10,7 @@ from encryption import encrypt, decrypt
 from config import OPENAI_API_KEY, DEFAULT_PASSWORD, SECRET_KEY, SALT, SENDGRID_API_KEY
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from dailyscrape import get_current_date, get_history_event_of_the_day, get_weather, get_top_news_stories, get_stock_market_news
 
 app = Flask(__name__)
 
@@ -59,15 +60,43 @@ def classify_note(note):
   return classification
 
 
+def get_summary_string():
+  summary = []
+
+  current_date = get_current_date()
+  summary.append(f"Today's date: {current_date}")
+
+  event_of_the_day = get_history_event_of_the_day()
+  summary.append(f"Today in history: {event_of_the_day}")
+
+  weather = get_weather()
+  summary.append(weather)
+
+  summary.append("\nTop tech news stories:")
+  top_stories = get_top_news_stories()
+  for story in top_stories:
+    summary.append(f"{story['title']} - {story['link']}")
+
+  summary.append("\nStock market news:")
+  stock_stories = get_stock_market_news()
+  for story in stock_stories:
+    summary.append(f"{story['title']} - {story['link']}")
+
+  return "\n".join(summary)
+
+
 def generate_report(decrypted_notes):
-  context = "Generate a personalized daily briefing based on the tasks listed in the following:\n"
+  summary_string = get_summary_string()
+
+  context = f"Generate a personalized daily briefing for Matthew. You will be given context that includes the date, a historical event, tech news, market news, and personal categorized notes that Matthew takes throughout the day. Use the context to greet Matthew. Give an interesting summary of the weather, news, and historical event. Then organize and modify Matthews notes in an easily ingestible format without changing the meaning of the notes. End with a relavent motivational quote.  Context:\n{summary_string}\n"
+
   for category, notes_list in decrypted_notes.items():
     if notes_list:
       context += f"{category}:\n"
       context += "\n".join(notes_list) + "\n"
 
   response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
+    model="gpt-4",
     messages=[{
       "role":
       "system",
@@ -198,8 +227,8 @@ def send_report_email(report_text):
 def init_scheduler():
   scheduler = BackgroundScheduler()
 
-  hour = 22  # Set the hour to 17 (5 PM in 24-hour format)
-  minute = 42  # Set the minute to 40
+  hour = 18  # Set the hour to 17 (5 PM in 24-hour format)
+  minute = 0  # Set the minute to 40
 
   trigger = CronTrigger(hour=hour, minute=minute, timezone='UTC')
   scheduler.add_job(daily_report, trigger=trigger)
